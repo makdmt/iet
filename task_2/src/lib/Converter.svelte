@@ -52,3 +52,8 @@
   <p>{err.message}</p>
 {/await}
 
+<style>
+  input {
+    text-align: center;
+  }
+</style>
