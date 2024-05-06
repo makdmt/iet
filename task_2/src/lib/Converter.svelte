@@ -30,14 +30,24 @@
 {#await promise}
   <p>Loading...</p>
 {:then response}
-  <select bind:value={currencies} >
+  
+  <span>Конвертировать из: </span>
+  <select bind:value={srsCurrency} on:change={calcAmount(parseFloat(srcAmount), srsCurrency, targetCurrency, response.rates)}>
     {#each currencies as currency}
     <option>{currency}</option>
     {/each}
   </select>
-  <input bind:value={srcAmount} on:input={() => calcAmount(parseFloat(srcAmount), 'AED', 'ARS', response.rates)}/>
-  <p>{targetAmount}</p>
-  <p>{response.rates.AED / response.rates.ARS}</p>
+  <span> в </span>
+  <select bind:value={targetCurrency} on:change={calcAmount(parseFloat(srcAmount), srsCurrency, targetCurrency, response.rates)} >
+    {#each currencies as currency}
+      <option>{currency}</option>
+     {/each}
+</select>
+  <p> введите количество: </p><input bind:value={srcAmount} on:input={() => calcAmount(parseFloat(srcAmount), srsCurrency, targetCurrency, response.rates)}/>
+  {#if targetAmount && !isNaN(targetAmount)}
+  <h3>Результат:</h3>
+  <p>{`${targetAmount} ${targetCurrency}`}</p>
+  {/if}
 {:catch err}
   <p>{err.message}</p>
 {/await}
